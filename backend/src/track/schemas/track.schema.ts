@@ -14,7 +14,7 @@ export class Track {
   artist: string;
 
   @Prop()
-  track: string;
+  desc: string;
 
   @Prop()
   listens: number;
