@@ -1,12 +1,12 @@
 export class CreateTrackDto {
-  readonly name;
-  readonly artist;
-  readonly desc;
+  readonly name: string;
+  readonly artist: string;
+  readonly desc: string;
 }
 
 export class UpdateTrackDto {
-  readonly name;
-  readonly artist;
-  readonly desc;
-  readonly listens;
+  readonly name: string;
+  readonly artist: string;
+  readonly desc: string;
+  readonly listens: number;
 }
