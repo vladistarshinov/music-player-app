@@ -20,14 +20,21 @@ export class TrackService {
     return track;
   }
 
-  async fetchAllTracks(): Promise<Track[]> {
-    const tracks = await this.trackModel.find();
+  async fetchAllTracks(count: number = 10, offset: number = 0): Promise<Track[]> {
+    const tracks = await this.trackModel.find().skip(Number(offset)).limit(Number(count));
     return tracks;
   }
 
   async fetchTrack(id: ObjectId): Promise<Track> {
     const track = await this.trackModel.findById(id).populate('comments');
     return track;
+  }
+
+  async searchTrack(query: string): Promise<Track[]> {
+    const tracks = await this.trackModel.find({
+      name: {$regex: new RegExp(query, 'i')}
+    });
+    return tracks;
   }
 
   async updateTrack(id: ObjectId, dto: UpdateTrackDto): Promise<Track> {
