@@ -5,14 +5,18 @@ import { Model, ObjectId } from 'mongoose';
 import { Comment, CommentDocument } from "./schemas/comment.schema";
 import { CreateTrackDto, UpdateTrackDto } from "./dto/track.dto";
 import { CreateCommentDto } from "./dto/comment.dto";
+import { FileService, FileType } from "src/file/file.service";
 
 @Injectable()
 export class TrackService {
   constructor(@InjectModel(Track.name) private trackModel: Model<TrackDocument>,
-              @InjectModel(Comment.name) private commentModel: Model<CommentDocument>) {}
+              @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
+              private fileService: FileService) {}
 
-  async createTrack(dto: CreateTrackDto): Promise<Track> {
-    const track = await this.trackModel.create({...dto, listens: 0});
+  async createTrack(dto: CreateTrackDto, cover, audio): Promise<Track> {
+    const coverPath = this.fileService.createFile(FileType.IMAGE, cover);
+    const audioPath = this.fileService.createFile(FileType.AUDIO, audio);
+    const track = await this.trackModel.create({...dto, listens: 0, cover: coverPath, audio: audioPath});
     return track;
   }
 
@@ -31,7 +35,7 @@ export class TrackService {
     return trackUpdate;
   }
 
-  async deleteTrack(id: ObjectId): Promise<ObjectId> {
+  async removeTrack(id: ObjectId): Promise<ObjectId> {
     const track = await this.trackModel.findByIdAndDelete(id);
     return track._id;
   }
@@ -42,6 +46,12 @@ export class TrackService {
     track.comments.push(comment._id);
     await track.save();
     return comment;
+  }
+
+  async updateCountOfListen(id: ObjectId) {
+    const track = await this.trackModel.findById(id);
+    track.listens++;
+    track.save();
   }
 
 }
