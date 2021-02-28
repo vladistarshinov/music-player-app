@@ -1,8 +1,9 @@
 import { Card, Grid, IconButton } from '@material-ui/core';
 import React from 'react';
 import { ITrack } from '../types/tracks';
-import styles from '../styles/TrackItem.module.scss'
+import styles from '../styles/TrackItem.module.scss';
 import { Delete, Pause, PlayArrow } from '@material-ui/icons';
+import { useRouter } from 'next/router';
 
 interface TrackItemProps {
   track: ITrack;
@@ -10,9 +11,10 @@ interface TrackItemProps {
 }
 
 export const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
+  const router = useRouter();
   return (
-    <Card className={styles.track}>
-      <IconButton>
+    <Card className={styles.track} onClick={() => router.push(`/tracks/${track._id}`)}>
+      <IconButton onClick={e => e.stopPropagation()}>
         {active 
         ? <Pause />
         : <PlayArrow />
@@ -24,7 +26,7 @@ export const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) =
         <div className={styles.track__artist}>{track.artist}</div>
       </Grid>
       {active && <div>02:11 / 03:11</div>}
-      <IconButton className={styles.track__delete}>
+      <IconButton onClick={e => e.stopPropagation()} className={styles.track__delete}>
         <Delete />
       </IconButton>
     </Card>
