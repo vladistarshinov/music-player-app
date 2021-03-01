@@ -1,10 +1,13 @@
-import { Grid, Button, TextField } from '@material-ui/core';
+import { Grid, Button, TextField, Box } from '@material-ui/core';
 import React, { useState } from 'react'
+import FileUpload from '../../components/FileUpload';
 import StepWrapper from '../../components/StepWrapper';
 import MainLayout from '../../layouts/MainLayout';
 
 const Сreation = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [cover, setCover] = useState(null);
+  const [track, setTrack] = useState(null);
 
   const back = () => {
     setActiveStep(prev => prev-1)
@@ -43,10 +46,26 @@ const Сreation = () => {
           </Grid>
         )}
         {activeStep === 1 && (
-          <h1>Загрузка обложки</h1>
+          <>
+            <h1 style={{ textAlign: 'center' }}>Загрузка обложки</h1>
+            <FileUpload setFile={setCover} accept="image/*">
+              <Box display="block" style={{ textAlign: 'center' }}>
+                <Button>Загрузить обложку</Button>
+                {cover !== null && <p>{cover.name}</p>}
+              </Box>
+            </FileUpload>
+          </>
         )}
         {activeStep === 2 && (
-          <h1>Загрузка трека</h1>
+          <>
+            <h1 style={{ textAlign: 'center' }}>Загрузка трека</h1>
+            <FileUpload setFile={setTrack} accept="audio/*">
+              <Box display="block" style={{ textAlign: 'center' }}>
+                <Button>Загрузить трек</Button>
+                {track !== null && <p>{track.name}</p>}
+              </Box>
+            </FileUpload>
+          </>
         )}
       </StepWrapper>
       <Grid container justifyContent="space-between">
