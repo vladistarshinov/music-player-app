@@ -16,9 +16,9 @@ const Player = () => {
           : <PlayArrow />
         }
       </IconButton>
-      <Grid container direction="column" style={{ width: '20%' }}>
+      <Grid container direction="column" style={{ width: 200, margin: '0 20px' }}>
         <div>{track.name}</div>
-        <div>{track.artist}</div>
+        <div style={{ fontSize: 12, color: 'gray' }}>{track.artist}</div>
       </Grid>
       <TrackProgress leftValue={0} rightValue={100} onChange={() => ({})} />
       <VolumeUp style={{ marginLeft: 'auto' }} />
