@@ -3,9 +3,9 @@ import { PlayerActionTypes } from "../constants/player.constants";
 import { PlayerState } from "../types/player.state";
 
 const initialState: PlayerState = {
-  play: false,
+  play: true,
   active: null,
-  volume: 0,
+  volume: 40,
   currentTime: 0,
   duration: 0,
 };
