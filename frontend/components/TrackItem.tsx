@@ -29,7 +29,7 @@ export const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) =
         : <PlayArrow />
         }
       </IconButton>
-      <img width={70} height={70} src={track.cover}/>
+      <img width={70} height={70} src={`http://localhost:5000/${track.cover}`}/>
       <Grid container direction="column" className={styles.track__data}>
         <div>{track.name}</div>
         <div className={styles.track__artist}>{track.artist}</div>
