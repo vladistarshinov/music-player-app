@@ -1,13 +1,20 @@
 import { Grid, Button, TextField, Box } from '@material-ui/core';
+import axios from 'axios';
+import { Router, useRouter } from 'next/router';
 import React, { useState } from 'react'
 import FileUpload from '../../components/FileUpload';
 import StepWrapper from '../../components/StepWrapper';
+import { useInput } from '../../hooks/useInput';
 import MainLayout from '../../layouts/MainLayout';
 
 const Сreation = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [cover, setCover] = useState(null);
   const [track, setTrack] = useState(null);
+  const name = useInput('');
+  const artist = useInput('');
+  const text = useInput('');
+  const router = useRouter();
 
   const back = () => {
     setActiveStep(prev => prev-1)
@@ -16,6 +23,16 @@ const Сreation = () => {
   const next = () => {
     if (activeStep !== 2) {
       setActiveStep(prev => prev+1)
+    } else {
+      const formData = new FormData();
+      formData.append('name', name.value);
+      formData.append('artist', artist.value);
+      formData.append('text', text.value);
+      formData.append('cover', cover);
+      formData.append('audio', track);
+      axios.post('http://localhost:5000/tracks', formData)
+        .then(res => router.push('/tracks'))
+        .catch(e => console.log(e));
     }
   };
 
@@ -26,16 +43,19 @@ const Сreation = () => {
           <Grid container direction="column" style={{ padding: 20 }}>
             <h1>Загрузка информации о треке</h1>
             <TextField
+              {...name}
               style={{ marginTop: 10 }}
               label="Название трека"
               fullWidth
             />
             <TextField 
+              {...artist}
               style={{ marginTop: 10 }}
               label="Исполнитель"
               fullWidth
             />
             <TextField 
+              {...text}
               style={{ marginTop: 10 }}
               label="Слова к песне"
               fullWidth
