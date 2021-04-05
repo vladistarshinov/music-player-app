@@ -6,12 +6,29 @@ import MainLayout from '../../layouts/MainLayout';
 import { IComment, ITrack } from '../../types/tracks';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
+import { useInput } from '../../hooks/useInput';
 
 const TrackDetail = ({ serverTrack }) => {
   // const track: ITrack = {_id: '1', name: 'Track 1', artist: 'Исполнитель 1', desc: 'Text text text', listens: 0, cover: 'http://localhost:5000/image/5c90134e-f144-40a5-bbad-47fc42b24aa9.jpg', audio: 'http://localhost:5000/audio/0c861925-3831-4790-a59b-c02cb6efdbe3.mp3', comments: []};
 
   const router = useRouter();
-  const [track, setTrack] = useState(serverTrack);
+  const [track, setTrack] = useState<ITrack>(serverTrack);
+  const username = useInput('');
+  const textComment = useInput('');
+
+  const addComment = async () => {
+    try {
+      const res = await axios.post('http://localhost:5000/tracks/comment', {
+        username: username.value,
+        desc: textComment.value,
+        trackId: track._id
+      });
+      setTrack({...track, comments: [...track.comments, res.data]})
+    } catch (e) {
+      console.log(e);
+      
+    }
+  };
 
   return (
     <MainLayout>
@@ -35,21 +52,23 @@ const TrackDetail = ({ serverTrack }) => {
       <h2>Оставить комментарий</h2>
       <Grid container>
         <TextField 
+          {...username}
           label="Ваше имя"
           fullWidth
         />
         <TextField 
+          {...textComment}
           label="Комментарий"
           fullWidth
           multiline
           rows={4}
         />
-        <Button>Отправить</Button>
+        <Button onClick={addComment}>Отправить</Button>
       </Grid>
       <h2>Комментарии</h2>
       <div>
         {track.comments.map((comment: IComment) =>
-          <div>
+          <div style={{ marginBottom: 10 }}>
             <div>{comment.username}</div>
             <div>{comment.desc}</div>
           </div>
