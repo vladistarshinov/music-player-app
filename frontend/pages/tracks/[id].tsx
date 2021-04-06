@@ -9,7 +9,6 @@ import axios from 'axios';
 import { useInput } from '../../hooks/useInput';
 
 const TrackDetail = ({ serverTrack }) => {
-  // const track: ITrack = {_id: '1', name: 'Track 1', artist: 'Исполнитель 1', desc: 'Text text text', listens: 0, cover: 'http://localhost:5000/image/5c90134e-f144-40a5-bbad-47fc42b24aa9.jpg', audio: 'http://localhost:5000/audio/0c861925-3831-4790-a59b-c02cb6efdbe3.mp3', comments: []};
 
   const router = useRouter();
   const [track, setTrack] = useState<ITrack>(serverTrack);
@@ -31,7 +30,10 @@ const TrackDetail = ({ serverTrack }) => {
   };
 
   return (
-    <MainLayout>
+    <MainLayout 
+      title={`${track.artist} ${track.name} - музыкальная площадка`}
+      keywords={`Музыка, артисты, ${track.name}, ${track.artist}`}
+    >
       <Button 
         className={styles.track_detail__back_btn} 
         variant={'outlined'} 
